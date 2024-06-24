@@ -8,12 +8,15 @@
 #include <tiny_websockets/network/generic_esp/generic_esp_clients.hpp>
 
 #include <WiFi.h>
+#ifndef _WS_CONFIG_NO_SSL
 #include <WiFiClientSecure.h>
+#endif
 #include <HTTPClient.h>
 
 namespace websockets { namespace network {
   typedef GenericEspTcpClient<WiFiClient> Esp32TcpClient;
   
+  #ifndef _WS_CONFIG_NO_SSL
   class SecuredEsp32TcpClient : public GenericEspTcpClient<WiFiClientSecure> {
   public:
     void setCACert(const char* ca_cert) {
@@ -28,6 +31,7 @@ namespace websockets { namespace network {
       this->client.setPrivateKey(private_key);
     }    
   };
+  #endif // _WS_CONFIG_NO_SSL
 
 
   class Esp32TcpServer : public TcpServer {
